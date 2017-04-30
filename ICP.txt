@@ -1,0 +1,25 @@
+In Circuit Programming - EPF011/021
+-----------------------------------
+
+Reversed from EPConsole.exe application, the ICP protocol, which allows reads :)
+
+Bootstrap:
+- wait for a sequence of ';' characters (at least 10)
+- write '5', wait to see if ';' chars stop. Repeat if not (up to 4096 times)
+
+Read Flash (one 512 byte block):
+- set mode (read) and address (multiple of 256)
+  - write 139 (dec) followed by (addr >> 8)
+  - read byte, confirm 139 (dec)
+  - write 85 (dec)
+  - read byte, confirm (addr >> 8)
+  - write 85 (dec)
+- start command execution
+  - write 140 (dec)
+- read and ack block bytes
+  x512 bytes:
+    - read byte, store in buffer
+    - write 85 (dec)
+- read block end and ack
+  - read byte, confirm 136 (dec)
+  - write 85 (dec)
