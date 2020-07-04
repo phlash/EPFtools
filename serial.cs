@@ -14,7 +14,9 @@ public class serial {
 		SerialPort sp = new SerialPort(port, 57600);
 		try {
 			sp.Open();
-			Console.WriteLine("port open, you have the con!");
+			Console.WriteLine("port open, you have the console!");
+			Console.WriteLine("Press '5' to enter programming mode and stop the semicolon output, see ICP.txt.");
+			Console.WriteLine("Press Escape to quit, Press Backspace to start dump.");
 			bool done= false;
 			while (!done) {
 				while (sp.BytesToRead > 0)
@@ -57,20 +59,24 @@ public class serial {
 			recv = sp.ReadByte();
 			if (recv<0)	{	// timeout
 				Console.WriteLine("timeout (cmd)");
+				dump.Close();
 				return;
 			}
 			if (139!=(byte)recv) {
 				Console.WriteLine("mode ack failed");
+				dump.Close();
 				return;
 			}
 			sp.Write(ack, 0, 1);
 			recv = sp.ReadByte();
 			if (recv<0) {
 				Console.WriteLine("timeout (addr)");
+				dump.Close();
 				return;
 			}
 			if (recv!=badr) {
 				Console.WriteLine("addr ack failed");
+				dump.Close();
 				return;
 			}
 			sp.Write(ack, 0, 1);
@@ -83,6 +89,7 @@ public class serial {
 				recv = sp.ReadByte();
 				if (recv<0) {
 					Console.WriteLine("timeout (data)");
+					dump.Close();
 					return;
 				}
 				sp.Write(ack, 0, 1);
@@ -93,11 +100,14 @@ public class serial {
 			recv = sp.ReadByte();
 			if (recv<0) {
 				Console.WriteLine("timeout (block end)");
+				dump.Close();
 				return;
 			}
 			if (136!=(byte)recv) {
-				Console.WriteLine("block ack failed");
-				return;
+				Console.WriteLine("block ack failed, retrying");
+				addr-=512;
+				dump.Seek(-512, SeekOrigin.Current);
+				continue;
 			}
 			sp.Write(ack, 0, 1);
 			Console.WriteLine("OK");
