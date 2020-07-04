@@ -6,3 +6,7 @@ Currently an early (but working) flash dump / serial console tool written in C#
 that can be compiled/run on Linux or Windows with mono (mcs) or CLR (csc).
 
 Sorry, no Makefile yet, it's trivial to build with mono: mcs serial.cs
+
+## MCUManual.zip
+
+You will need a password to unpack: random
