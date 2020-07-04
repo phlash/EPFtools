@@ -14,7 +14,9 @@ public class serial {
 		SerialPort sp = new SerialPort(port, 57600);
 		try {
 			sp.Open();
-			Console.WriteLine("port open, you have the con!");
+			Console.WriteLine("port open, you have the console!");
+			Console.WriteLine("Press '5' to enter programming mode and stop the semicolon output, see ICP.txt.");
+			Console.WriteLine("Press Escape to quit, Press Backspace to start dump.");
 			bool done= false;
 			while (!done) {
 				while (sp.BytesToRead > 0)
