@@ -59,20 +59,24 @@ public class serial {
 			recv = sp.ReadByte();
 			if (recv<0)	{	// timeout
 				Console.WriteLine("timeout (cmd)");
+				dump.Close();
 				return;
 			}
 			if (139!=(byte)recv) {
 				Console.WriteLine("mode ack failed");
+				dump.Close();
 				return;
 			}
 			sp.Write(ack, 0, 1);
 			recv = sp.ReadByte();
 			if (recv<0) {
 				Console.WriteLine("timeout (addr)");
+				dump.Close();
 				return;
 			}
 			if (recv!=badr) {
 				Console.WriteLine("addr ack failed");
+				dump.Close();
 				return;
 			}
 			sp.Write(ack, 0, 1);
@@ -85,6 +89,7 @@ public class serial {
 				recv = sp.ReadByte();
 				if (recv<0) {
 					Console.WriteLine("timeout (data)");
+					dump.Close();
 					return;
 				}
 				sp.Write(ack, 0, 1);
@@ -95,10 +100,12 @@ public class serial {
 			recv = sp.ReadByte();
 			if (recv<0) {
 				Console.WriteLine("timeout (block end)");
+				dump.Close();
 				return;
 			}
 			if (136!=(byte)recv) {
 				Console.WriteLine("block ack failed");
+				dump.Close();
 				return;
 			}
 			sp.Write(ack, 0, 1);
