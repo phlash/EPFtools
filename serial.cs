@@ -104,9 +104,10 @@ public class serial {
 				return;
 			}
 			if (136!=(byte)recv) {
-				Console.WriteLine("block ack failed");
-				dump.Close();
-				return;
+				Console.WriteLine("block ack failed, retrying");
+				addr-=512;
+				dump.Seek(-512, SeekOrigin.Current);
+				continue;
 			}
 			sp.Write(ack, 0, 1);
 			Console.WriteLine("OK");
